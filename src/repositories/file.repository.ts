@@ -1,6 +1,6 @@
 import {inject} from '@loopback/core';
 import {DefaultCrudRepository} from '@loopback/repository';
-import {MongodbDataSource} from '../datasources/mongodb.datasource';
+import {MongodbDataSource} from '../datasources';
 import {File, FileRelations} from '../models';
 
 export class FileRepository extends DefaultCrudRepository<

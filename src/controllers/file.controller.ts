@@ -4,18 +4,12 @@ import {
   Filter,
   FilterExcludingWhere,
   repository,
-  Where,
+  Where
 } from '@loopback/repository';
 import {
-  post,
-  param,
-  get,
-  getModelSchemaRef,
-  patch,
-  put,
-  del,
-  requestBody,
-  response,
+  del, get,
+  getModelSchemaRef, param, patch, post, put, requestBody,
+  response
 } from '@loopback/rest';
 import {File} from '../models';
 import {FileRepository} from '../repositories';
@@ -23,8 +17,8 @@ import {FileRepository} from '../repositories';
 export class FileController {
   constructor(
     @repository(FileRepository)
-    public fileRepository : FileRepository,
-  ) {}
+    public fileRepository: FileRepository,
+  ) { }
 
   @post('/files')
   @response(200, {
@@ -105,7 +99,7 @@ export class FileController {
     },
   })
   async findById(
-    @param.path.number('id') id: number,
+    @param.path.string('id') id: string,
     @param.filter(File, {exclude: 'where'}) filter?: FilterExcludingWhere<File>
   ): Promise<File> {
     return this.fileRepository.findById(id, filter);
@@ -116,7 +110,7 @@ export class FileController {
     description: 'File PATCH success',
   })
   async updateById(
-    @param.path.number('id') id: number,
+    @param.path.string('id') id: string,
     @requestBody({
       content: {
         'application/json': {
@@ -134,7 +128,7 @@ export class FileController {
     description: 'File PUT success',
   })
   async replaceById(
-    @param.path.number('id') id: number,
+    @param.path.string('id') id: string,
     @requestBody() file: File,
   ): Promise<void> {
     await this.fileRepository.replaceById(id, file);
@@ -144,7 +138,7 @@ export class FileController {
   @response(204, {
     description: 'File DELETE success',
   })
-  async deleteById(@param.path.number('id') id: number): Promise<void> {
+  async deleteById(@param.path.string('id') id: string): Promise<void> {
     await this.fileRepository.deleteById(id);
   }
 }
