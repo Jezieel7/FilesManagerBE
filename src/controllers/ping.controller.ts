@@ -1,10 +1,7 @@
 import {inject} from '@loopback/core';
 import {
-  Request,
-  RestBindings,
-  get,
-  response,
-  ResponseObject,
+  get, Request, response,
+  ResponseObject, RestBindings
 } from '@loopback/rest';
 
 /**
@@ -38,7 +35,7 @@ const PING_RESPONSE: ResponseObject = {
  * A simple controller to bounce back http requests
  */
 export class PingController {
-  constructor(@inject(RestBindings.Http.REQUEST) private req: Request) {}
+  constructor(@inject(RestBindings.Http.REQUEST) private req: Request) { }
 
   // Map to `GET /ping`
   @get('/ping')
@@ -48,8 +45,49 @@ export class PingController {
     return {
       greeting: 'Hello from LoopBack',
       date: new Date(),
+      //os: os.hostname(),
       url: this.req.url,
       headers: Object.assign({}, this.req.headers),
     };
+  }
+
+  @get('/sleep', {
+    parameters: [{name: 'ms', schema: {type: 'number'}, in: 'query'}],
+    responses: {
+      '200': {
+        description: 'Sleep in ms',
+        content: {
+          'application/json': {
+            schema: {type: 'string'},
+          },
+        },
+      },
+    },
+  })
+  async sleep(ms: number) {
+    await this.delay(ms)
+    return `Waking up after ${ms} ms`;
+  }
+  delay(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  @get('/fib', {
+    parameters: [{name: 'num', schema: {type: 'number'}, in: 'query'}],
+    responses: {
+      '200': {
+        description: 'Compute fibonacci',
+        content: {
+          'application/json': {
+            schema: {type: 'number'},
+          },
+        },
+      },
+    },
+  })
+  async fib(num: number) {return this.fibonacci(num)}
+  fibonacci(num: number): number {
+    if (num <= 1) return 1;
+    return this.fibonacci(num - 1) + this.fibonacci(num - 2);
   }
 }
