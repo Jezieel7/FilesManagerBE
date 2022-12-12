@@ -1,3 +1,6 @@
+import {AuthenticationComponent} from '@loopback/authentication';
+import {JWTAuthenticationComponent, UserServiceBindings} from '@loopback/authentication-jwt';
+import {AuthorizationComponent} from '@loopback/authorization';
 import {BootMixin} from '@loopback/boot';
 import {ApplicationConfig, createBindingFromClass} from '@loopback/core';
 import {CronComponent} from '@loopback/cron';
@@ -34,6 +37,12 @@ export class FilesManagerApplication extends BootMixin(
 
     this.component(CronComponent);
     this.add(createBindingFromClass(MyCronJob));
+
+    this.component(AuthenticationComponent);
+    this.component(JWTAuthenticationComponent);
+    this.component(AuthorizationComponent);
+    this.dataSource(DbsampleDataSource, UserServiceBindings.DATASOURCE_NAME);
+
 
     this.projectRoot = __dirname;
     // Customize @loopback/boot Booter Conventions here
